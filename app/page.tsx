@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { callAIAgent } from '@/lib/aiAgent'
 import { GiDuck, GiSailboat, GiAnchor, GiWaves, GiLighthouse } from 'react-icons/gi'
 import { AiFillHeart, AiFillStar, AiOutlineStar } from 'react-icons/ai'
@@ -1213,42 +1213,6 @@ function MenuScreen({
   )
 }
 
-/* ─── Error Boundary ─────────────────────────────────────── */
-
-class PageErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean; error: string }
-> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props)
-    this.state = { hasError: false, error: '' }
-  }
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error: error.message }
-  }
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen flex items-center justify-center" style={{ background: C.bg, color: C.fg }}>
-          <div className="text-center p-8 max-w-md">
-            <GiDuck className="text-5xl mx-auto mb-4" style={{ color: C.primary }} />
-            <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
-            <p className="text-sm mb-4" style={{ color: C.mutedFg }}>{this.state.error}</p>
-            <button
-              onClick={() => this.setState({ hasError: false, error: '' })}
-              className="px-6 py-2.5 rounded-xl text-sm font-medium shadow-md"
-              style={{ background: C.primary, color: C.primaryFg }}
-            >
-              Try again
-            </button>
-          </div>
-        </div>
-      )
-    }
-    return this.props.children
-  }
-}
-
 /* ─── Main Page ──────────────────────────────────────────── */
 
 export default function Page() {
@@ -1268,8 +1232,7 @@ export default function Page() {
   }, [])
 
   return (
-    <PageErrorBoundary>
-      <div className="min-h-screen relative font-sans">
+      <div className="min-h-screen relative font-sans" style={{ background: C.bg }}>
         <AnimationStyles />
 
         {/* Sample Data Toggle */}
@@ -1332,6 +1295,5 @@ export default function Page() {
           <AgentInfoFooter activeAgentId={activeAgentId} />
         </div>
       </div>
-    </PageErrorBoundary>
   )
 }
