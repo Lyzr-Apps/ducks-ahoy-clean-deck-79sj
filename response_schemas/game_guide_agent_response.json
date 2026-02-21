@@ -1,0 +1,18 @@
+{
+  "agent_name": "Game Guide Agent",
+  "agent_id": "699a08af5c51ba0c6ba1b0bb",
+  "description": "Generates age-appropriate hints, encouragement, and tutorial narration for preschoolers based on current game state (duck positions, lives remaining, gondola location). Keeps tone cheerful and simple.",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "message": "string",
+    "emotion": "string",
+    "action_suggestion": "string"
+  },
+  "example_response": {
+    "message": "The cheerful hint, encouragement, or tutorial text for the child",
+    "emotion": "The emotional tone: happy, excited, gentle, celebratory, encouraging",
+    "action_suggestion": "A simple suggested action for the player like steer left, go to beach, collect duck"
+  }
+}

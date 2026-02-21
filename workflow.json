@@ -1,0 +1,50 @@
+{
+  "workflow": {
+    "nodes": [
+      {
+        "id": "input_node",
+        "type": "Input",
+        "label": "Game State Context",
+        "nodeCategory": "input"
+      },
+      {
+        "id": "game_guide_agent",
+        "type": "Agent",
+        "label": "Game Guide Agent",
+        "nodeCategory": "agent"
+      },
+      {
+        "id": "output_node",
+        "type": "Output",
+        "label": "Hint/Encouragement Response",
+        "nodeCategory": "end"
+      }
+    ],
+    "edges": [
+      {
+        "source": "input_node",
+        "target": "game_guide_agent"
+      },
+      {
+        "source": "game_guide_agent",
+        "target": "output_node"
+      }
+    ]
+  },
+  "agents": [
+    {
+      "node_id": "game_guide_agent",
+      "agent_id": "699a08af5c51ba0c6ba1b0bb",
+      "name": "Game Guide Agent",
+      "description": "Generates age-appropriate hints, encouragement, and tutorial narration for preschoolers based on current game state (duck positions, lives remaining, gondola location). Keeps tone cheerful and simple.",
+      "provider": "OpenAI",
+      "model": "gpt-4.1",
+      "temperature": 0.7,
+      "top_p": 0.95,
+      "tools": [],
+      "voice_config": null,
+      "image_output_config": null,
+      "file_output": false
+    }
+  ]
+}

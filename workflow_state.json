@@ -1,0 +1,26 @@
+{
+  "agents": [
+    {
+      "node_id": "game_guide_agent",
+      "agent_id": "699a08af5c51ba0c6ba1b0bb",
+      "name": "Game Guide Agent",
+      "agent_type": "text",
+      "provider": "OpenAI",
+      "model": "gpt-4.1",
+      "temperature": 0.7,
+      "top_p": 0.95
+    }
+  ],
+  "knowledge_bases": [],
+  "schedules": [],
+  "response_schemas": {
+    "game_guide_agent": {
+      "schema_file": "response_schemas/game_guide_agent_response.json",
+      "fields": {
+        "message": "string",
+        "emotion": "string",
+        "action_suggestion": "string"
+      }
+    }
+  }
+}
