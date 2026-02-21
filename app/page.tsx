@@ -9,29 +9,11 @@ import { BsFillTrophyFill, BsHandThumbsUpFill, BsEmojiSmileFill, BsStars, BsLigh
 import { FiSend, FiArrowRight, FiChevronRight } from 'react-icons/fi'
 import { MdWaves } from 'react-icons/md'
 
-// ─── Constants ──────────────────────────────────────────────
+/* ─── Constants ──────────────────────────────────────────── */
 
 const GAME_GUIDE_AGENT_ID = '699a08af5c51ba0c6ba1b0bb'
 
-const THEME_VARS = {
-  '--background': '30 40% 98%',
-  '--foreground': '20 40% 10%',
-  '--card': '30 40% 96%',
-  '--card-foreground': '20 40% 10%',
-  '--primary': '24 95% 53%',
-  '--primary-foreground': '30 40% 98%',
-  '--secondary': '30 35% 92%',
-  '--secondary-foreground': '20 40% 10%',
-  '--accent': '12 80% 50%',
-  '--accent-foreground': '30 40% 98%',
-  '--muted': '30 30% 90%',
-  '--muted-foreground': '20 25% 45%',
-  '--border': '30 35% 88%',
-  '--ring': '24 95% 53%',
-  '--radius': '0.875rem',
-} as React.CSSProperties
-
-// ─── Types ──────────────────────────────────────────────────
+/* ─── Types ──────────────────────────────────────────────── */
 
 type Screen = 'menu' | 'game' | 'tutorial' | 'gameover'
 type EventType = 'hint' | 'encouragement' | 'tutorial' | 'warning' | 'celebration'
@@ -47,7 +29,26 @@ interface GuideMessage {
   actionSuggestion?: string
 }
 
-// ─── Sample Data ────────────────────────────────────────────
+/* ─── Color Palette (Sunset Theme) ───────────────────────── */
+
+const C = {
+  bg: '#FBF8F5',
+  fg: '#1A1008',
+  card: '#F6F0EA',
+  cardFg: '#1A1008',
+  primary: '#F97316',
+  primaryFg: '#FBF8F5',
+  secondary: '#EDE4DA',
+  secondaryFg: '#1A1008',
+  accent: '#E63B17',
+  accentFg: '#FBF8F5',
+  muted: '#E8E0D6',
+  mutedFg: '#8A7260',
+  border: '#E2D8CC',
+  ring: '#F97316',
+}
+
+/* ─── Sample Data ────────────────────────────────────────── */
 
 const SAMPLE_MESSAGES: GuideMessage[] = [
   {
@@ -94,7 +95,7 @@ const SAMPLE_MESSAGES: GuideMessage[] = [
   },
 ]
 
-// ─── Helpers ────────────────────────────────────────────────
+/* ─── Helpers ────────────────────────────────────────────── */
 
 function getEmotionIcon(emotion?: Emotion) {
   switch (emotion) {
@@ -179,7 +180,63 @@ function formatInline(text: string) {
   )
 }
 
-// ─── CSS Animations (injected via style tag alternative: useEffect) ──
+/* ─── Global CSS Keyframes ───────────────────────────────── */
+
+const GLOBAL_STYLES = `
+@keyframes da-wave {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(-15px) translateY(-4px); }
+  50% { transform: translateX(0) translateY(2px); }
+  75% { transform: translateX(15px) translateY(-3px); }
+}
+@keyframes da-wave2 {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(10px) translateY(-3px); }
+  50% { transform: translateX(-5px) translateY(3px); }
+  75% { transform: translateX(-10px) translateY(-2px); }
+}
+@keyframes da-float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+@keyframes da-waddle {
+  0% { transform: translateX(-40px) rotate(-5deg); opacity: 0; }
+  10% { opacity: 1; }
+  25% { transform: translateX(25vw) rotate(5deg); }
+  50% { transform: translateX(50vw) rotate(-5deg); }
+  75% { transform: translateX(75vw) rotate(5deg); }
+  90% { opacity: 1; }
+  100% { transform: translateX(100vw) rotate(-5deg); opacity: 0; }
+}
+@keyframes da-bubble-in {
+  0% { transform: scale(0.8) translateY(12px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes da-pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(249, 115, 22, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.6); }
+}
+@keyframes da-confetti {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-80px) rotate(720deg); opacity: 0; }
+}
+@keyframes da-title-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes da-duck-parade {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100vw); }
+}
+@keyframes da-hand-point {
+  0%, 100% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(10px); opacity: 1; }
+}
+@keyframes da-sparkle {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+`
 
 function AnimationStyles() {
   useEffect(() => {
@@ -187,130 +244,93 @@ function AnimationStyles() {
     if (document.getElementById(id)) return
     const style = document.createElement('style')
     style.id = id
-    style.textContent = `
-      @keyframes da-wave {
-        0%, 100% { transform: translateX(0) translateY(0); }
-        25% { transform: translateX(-15px) translateY(-4px); }
-        50% { transform: translateX(0) translateY(2px); }
-        75% { transform: translateX(15px) translateY(-3px); }
-      }
-      @keyframes da-wave2 {
-        0%, 100% { transform: translateX(0) translateY(0); }
-        25% { transform: translateX(10px) translateY(-3px); }
-        50% { transform: translateX(-5px) translateY(3px); }
-        75% { transform: translateX(-10px) translateY(-2px); }
-      }
-      @keyframes da-float {
-        0%, 100% { transform: translateY(0) rotate(-2deg); }
-        50% { transform: translateY(-8px) rotate(2deg); }
-      }
-      @keyframes da-waddle {
-        0% { transform: translateX(-40px) rotate(-5deg); opacity: 0; }
-        10% { opacity: 1; }
-        25% { transform: translateX(25%) rotate(5deg); }
-        50% { transform: translateX(50%) rotate(-5deg); }
-        75% { transform: translateX(75%) rotate(5deg); }
-        90% { opacity: 1; }
-        100% { transform: translateX(calc(100% + 40px)) rotate(-5deg); opacity: 0; }
-      }
-      @keyframes da-bubble-in {
-        0% { transform: scale(0.8) translateY(12px); opacity: 0; }
-        100% { transform: scale(1) translateY(0); opacity: 1; }
-      }
-      @keyframes da-pulse-glow {
-        0%, 100% { box-shadow: 0 0 8px rgba(249, 115, 22, 0.3); }
-        50% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.6); }
-      }
-      @keyframes da-confetti {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(-80px) rotate(720deg); opacity: 0; }
-      }
-      @keyframes da-title-float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-6px); }
-      }
-      @keyframes da-duck-parade {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100vw); }
-      }
-      @keyframes da-hand-point {
-        0%, 100% { transform: translateX(0); opacity: 0.7; }
-        50% { transform: translateX(10px); opacity: 1; }
-      }
-      @keyframes da-sparkle {
-        0%, 100% { transform: scale(1); opacity: 0.5; }
-        50% { transform: scale(1.3); opacity: 1; }
-      }
-      .da-wave-anim { animation: da-wave 4s ease-in-out infinite; }
-      .da-wave2-anim { animation: da-wave2 5s ease-in-out infinite; }
-      .da-float-anim { animation: da-float 3s ease-in-out infinite; }
-      .da-waddle-anim { animation: da-waddle 2.5s ease-in-out infinite; }
-      .da-bubble-anim { animation: da-bubble-in 0.4s ease-out forwards; }
-      .da-pulse-anim { animation: da-pulse-glow 2s ease-in-out infinite; }
-      .da-confetti-anim { animation: da-confetti 1s ease-out forwards; }
-      .da-title-anim { animation: da-title-float 3s ease-in-out infinite; }
-      .da-parade-anim { animation: da-duck-parade 6s linear infinite; }
-      .da-hand-anim { animation: da-hand-point 1.5s ease-in-out infinite; }
-      .da-sparkle-anim { animation: da-sparkle 2s ease-in-out infinite; }
-    `
+    style.textContent = GLOBAL_STYLES
     document.head.appendChild(style)
-    return () => { style.remove() }
+    return () => {
+      const el = document.getElementById(id)
+      if (el) el.remove()
+    }
   }, [])
   return null
 }
 
-// ─── Water Ripple Component ─────────────────────────────────
+/* ─── Water Ripple Component ─────────────────────────────── */
 
 function WaterRipples() {
   return (
     <div className="absolute bottom-0 left-0 right-0 h-24 overflow-hidden pointer-events-none">
-      <div className="da-wave-anim absolute bottom-0 left-0 right-0 flex items-end">
+      <div
+        className="absolute bottom-0 left-0 right-0 flex items-end"
+        style={{ animation: 'da-wave 4s ease-in-out infinite' }}
+      >
         {Array.from({ length: 12 }).map((_, i) => (
-          <div key={`w1-${i}`} className="flex-1 rounded-t-full" style={{ height: `${14 + Math.sin(i * 0.8) * 8}px`, background: 'rgba(249, 115, 22, 0.15)', marginLeft: '-2px' }} />
+          <div
+            key={`w1-${i}`}
+            className="flex-1 rounded-t-full"
+            style={{
+              height: `${14 + Math.sin(i * 0.8) * 8}px`,
+              background: 'rgba(249, 115, 22, 0.15)',
+              marginLeft: '-2px',
+            }}
+          />
         ))}
       </div>
-      <div className="da-wave2-anim absolute bottom-0 left-0 right-0 flex items-end" style={{ transform: 'translateX(20px)' }}>
+      <div
+        className="absolute bottom-0 left-0 right-0 flex items-end"
+        style={{ animation: 'da-wave2 5s ease-in-out infinite', transform: 'translateX(20px)' }}
+      >
         {Array.from({ length: 10 }).map((_, i) => (
-          <div key={`w2-${i}`} className="flex-1 rounded-t-full" style={{ height: `${10 + Math.cos(i * 0.9) * 6}px`, background: 'rgba(230, 59, 23, 0.1)', marginLeft: '-2px' }} />
+          <div
+            key={`w2-${i}`}
+            className="flex-1 rounded-t-full"
+            style={{
+              height: `${10 + Math.cos(i * 0.9) * 6}px`,
+              background: 'rgba(230, 59, 23, 0.1)',
+              marginLeft: '-2px',
+            }}
+          />
         ))}
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-8" style={{ background: 'linear-gradient(to top, rgba(249,115,22,0.08), transparent)' }} />
+      <div
+        className="absolute bottom-0 left-0 right-0 h-8"
+        style={{ background: 'linear-gradient(to top, rgba(249,115,22,0.08), transparent)' }}
+      />
     </div>
   )
 }
 
-// ─── Loading Duck Animation ─────────────────────────────────
+/* ─── Loading Duck Animation ─────────────────────────────── */
 
 function LoadingDuck() {
   return (
     <div className="flex flex-col items-center justify-center py-6 gap-3">
       <div className="relative w-full h-10 overflow-hidden">
-        <div className="da-waddle-anim absolute top-0 left-0">
-          <GiDuck className="text-3xl" style={{ color: '#F97316' }} />
+        <div className="absolute top-0 left-0" style={{ animation: 'da-waddle 2.5s ease-in-out infinite' }}>
+          <GiDuck className="text-3xl" style={{ color: C.primary }} />
         </div>
       </div>
-      <p className="text-sm" style={{ color: 'hsl(20 25% 45%)' }}>Your guide is thinking...</p>
+      <p className="text-sm" style={{ color: C.mutedFg }}>Your guide is thinking...</p>
     </div>
   )
 }
 
-// ─── Confetti Burst ─────────────────────────────────────────
+/* ─── Confetti Burst ─────────────────────────────────────── */
 
 function ConfettiBurst() {
-  const colors = ['#F97316', '#E63B17', '#FBBF24', '#FB923C', '#F59E0B']
+  const colors = [C.primary, C.accent, '#FBBF24', '#FB923C', '#F59E0B']
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
       {Array.from({ length: 12 }).map((_, i) => (
         <div
           key={`conf-${i}`}
-          className="da-confetti-anim absolute rounded-full"
+          className="absolute rounded-full"
           style={{
             width: '8px',
             height: '8px',
             background: colors[i % colors.length],
             left: `${15 + (i * 6)}%`,
             top: `${30 + (i % 3) * 15}%`,
-            animationDelay: `${i * 0.08}s`,
+            animation: `da-confetti 1s ease-out ${i * 0.08}s forwards`,
           }}
         />
       ))}
@@ -318,7 +338,7 @@ function ConfettiBurst() {
   )
 }
 
-// ─── Speech Bubble ──────────────────────────────────────────
+/* ─── Speech Bubble ──────────────────────────────────────── */
 
 function SpeechBubble({ msg }: { msg: GuideMessage }) {
   const isGuide = msg.role === 'guide'
@@ -334,8 +354,15 @@ function SpeechBubble({ msg }: { msg: GuideMessage }) {
 
   if (!isGuide) {
     return (
-      <div className="da-bubble-anim flex justify-end mb-3">
-        <div className="max-w-xs sm:max-w-sm rounded-2xl rounded-br-sm px-4 py-3 shadow-md" style={{ background: 'hsl(24 95% 53%)', color: 'hsl(30 40% 98%)' }}>
+      <div className="flex justify-end mb-3" style={{ animation: 'da-bubble-in 0.4s ease-out forwards' }}>
+        <div
+          className="max-w-xs sm:max-w-sm px-4 py-3 shadow-md"
+          style={{
+            background: C.primary,
+            color: C.primaryFg,
+            borderRadius: '0.875rem 0.875rem 0.25rem 0.875rem',
+          }}
+        >
           {msg.eventType && (
             <div className="flex items-center gap-1.5 mb-1 text-xs font-medium opacity-90">
               {getEventTypeIcon(msg.eventType)}
@@ -349,26 +376,39 @@ function SpeechBubble({ msg }: { msg: GuideMessage }) {
   }
 
   return (
-    <div className="da-bubble-anim flex justify-start mb-3 relative">
+    <div className="flex justify-start mb-3 relative" style={{ animation: 'da-bubble-in 0.4s ease-out forwards' }}>
       {showConfetti && <ConfettiBurst />}
       <div className="flex gap-2 max-w-xs sm:max-w-md">
-        <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-sm" style={{ background: 'hsl(30 35% 92%)' }}>
-          <GiDuck className="text-lg" style={{ color: '#F97316' }} />
+        <div
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-sm"
+          style={{ background: C.secondary }}
+        >
+          <GiDuck className="text-lg" style={{ color: C.primary }} />
         </div>
         <div>
-          <div className="rounded-2xl rounded-bl-sm px-4 py-3 shadow-md" style={{ background: 'hsl(30 40% 96%)', border: '1px solid hsl(30 35% 88%)' }}>
+          <div
+            className="px-4 py-3 shadow-md"
+            style={{
+              background: C.card,
+              border: `1px solid ${C.border}`,
+              borderRadius: '0.875rem 0.875rem 0.875rem 0.25rem',
+            }}
+          >
             {msg.emotion && (
               <div className="flex items-center gap-1.5 mb-2">
                 <span className="text-base">{getEmotionIcon(msg.emotion)}</span>
-                <span className="text-xs font-medium" style={{ color: 'hsl(20 25% 45%)' }}>{getEmotionLabel(msg.emotion)}</span>
+                <span className="text-xs font-medium" style={{ color: C.mutedFg }}>{getEmotionLabel(msg.emotion)}</span>
               </div>
             )}
-            <div style={{ color: 'hsl(20 40% 10%)' }}>
+            <div style={{ color: C.fg }}>
               {renderMarkdown(msg.message)}
             </div>
           </div>
           {msg.actionSuggestion && (
-            <div className="mt-1.5 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium" style={{ background: 'rgba(249,115,22,0.1)', color: '#F97316' }}>
+            <div
+              className="mt-1.5 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+              style={{ background: 'rgba(249,115,22,0.1)', color: C.primary }}
+            >
               <FiArrowRight className="text-xs flex-shrink-0" />
               <span>{msg.actionSuggestion}</span>
             </div>
@@ -379,84 +419,7 @@ function SpeechBubble({ msg }: { msg: GuideMessage }) {
   )
 }
 
-// ─── Menu Screen ────────────────────────────────────────────
-
-function MenuScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }) {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4" style={{ background: 'linear-gradient(to bottom, hsl(30 60% 95%), hsl(24 80% 90%), hsl(12 70% 88%))' }}>
-      {/* Sun glow */}
-      <div className="absolute top-8 right-8 w-20 h-20 rounded-full opacity-60" style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.5), rgba(249,115,22,0.1), transparent)', filter: 'blur(10px)' }} />
-
-      {/* Decorative icons */}
-      <div className="absolute top-16 left-8 da-float-anim opacity-30">
-        <GiLighthouse className="text-4xl" style={{ color: '#E63B17' }} />
-      </div>
-      <div className="absolute top-24 right-16 da-sparkle-anim opacity-30">
-        <BsStars className="text-2xl" style={{ color: '#F97316' }} />
-      </div>
-
-      {/* Main title */}
-      <div className="da-title-anim text-center mb-2 z-10">
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <GiDuck className="text-5xl" style={{ color: '#F97316' }} />
-          <GiSailboat className="text-4xl da-float-anim" style={{ color: '#E63B17' }} />
-        </div>
-        <h1 className="text-5xl sm:text-6xl font-bold tracking-tight" style={{ color: 'hsl(20 40% 10%)', letterSpacing: '-0.02em' }}>
-          Ducks Ahoy!
-        </h1>
-        <p className="text-lg sm:text-xl mt-2 font-medium" style={{ color: 'hsl(20 25% 45%)' }}>
-          Venice Gondola Adventure
-        </p>
-      </div>
-
-      {/* Gondola silhouette */}
-      <div className="da-float-anim mt-4 mb-8 z-10">
-        <div className="flex items-end gap-0">
-          <MdWaves className="text-2xl" style={{ color: 'rgba(249,115,22,0.4)' }} />
-          <GiSailboat className="text-5xl -mb-1" style={{ color: 'hsl(20 40% 10%)' }} />
-          <MdWaves className="text-2xl" style={{ color: 'rgba(249,115,22,0.4)' }} />
-        </div>
-      </div>
-
-      {/* Menu buttons */}
-      <div className="flex flex-col gap-4 w-full max-w-xs z-10">
-        <button
-          onClick={() => onNavigate('game')}
-          className="da-pulse-anim flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-lg font-semibold shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
-          style={{ background: 'hsl(24 95% 53%)', color: 'hsl(30 40% 98%)' }}
-        >
-          <IoPlay className="text-xl" />
-          <span>Play</span>
-        </button>
-        <button
-          onClick={() => onNavigate('tutorial')}
-          className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-lg font-semibold shadow-md transition-all duration-200 hover:scale-105 active:scale-95"
-          style={{ background: 'hsl(30 40% 96%)', color: 'hsl(20 40% 10%)', border: '2px solid hsl(30 35% 88%)' }}
-        >
-          <GiSailboat className="text-xl" style={{ color: '#F97316' }} />
-          <span>Tutorial</span>
-        </button>
-        <button
-          onClick={() => onNavigate('menu')}
-          className="flex items-center justify-center gap-3 px-6 py-3 rounded-2xl text-base font-medium shadow-sm transition-all duration-200 hover:scale-105 active:scale-95"
-          style={{ background: 'hsl(30 35% 92%)', color: 'hsl(20 25% 45%)' }}
-        >
-          <IoSettingsSharp className="text-lg" />
-          <span>Settings</span>
-        </button>
-      </div>
-
-      {/* Anchor decoration */}
-      <div className="mt-8 z-10 opacity-20">
-        <GiAnchor className="text-3xl" style={{ color: 'hsl(20 40% 10%)' }} />
-      </div>
-
-      <WaterRipples />
-    </div>
-  )
-}
-
-// ─── Event Type Picker ──────────────────────────────────────
+/* ─── Event Type Picker ──────────────────────────────────── */
 
 function EventTypePicker({
   selected,
@@ -482,9 +445,9 @@ function EventTypePicker({
           onClick={() => onSelect(et)}
           className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 hover:scale-105 active:scale-95 flex-shrink-0"
           style={{
-            background: selected === et ? colors[et] : 'hsl(30 35% 92%)',
-            color: selected === et ? 'white' : 'hsl(20 25% 45%)',
-            border: `1.5px solid ${selected === et ? colors[et] : 'hsl(30 35% 88%)'}`,
+            background: selected === et ? colors[et] : C.secondary,
+            color: selected === et ? 'white' : C.mutedFg,
+            border: `1.5px solid ${selected === et ? colors[et] : C.border}`,
           }}
         >
           <span className="text-sm">{getEventTypeIcon(et)}</span>
@@ -495,33 +458,160 @@ function EventTypePicker({
   )
 }
 
-// ─── Tutorial Screen ────────────────────────────────────────
+/* ─── Settings Panel ─────────────────────────────────────── */
 
-function TutorialScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }) {
+function SettingsPanel({ onClose }: { onClose: () => void }) {
+  const [difficulty, setDifficulty] = useState<Difficulty>('easy')
+  const [soundOn, setSoundOn] = useState(true)
+  const [controlMode, setControlMode] = useState<'swipe' | 'tilt'>('swipe')
+
+  const difficulties: { value: Difficulty; label: string; ducks: number }[] = [
+    { value: 'easy', label: 'Easy', ducks: 1 },
+    { value: 'medium', label: 'Medium', ducks: 2 },
+    { value: 'hard', label: 'Hard', ducks: 3 },
+  ]
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(26,16,8,0.5)', backdropFilter: 'blur(8px)' }}
+    >
+      <div
+        className="w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden"
+        style={{ background: C.bg, border: `1px solid ${C.border}` }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+          <div className="flex items-center gap-2">
+            <IoSettingsSharp className="text-lg" style={{ color: C.primary }} />
+            <h3 className="text-lg font-semibold" style={{ color: C.fg }}>Settings</h3>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg transition-all hover:scale-110"
+            style={{ color: C.mutedFg }}
+          >
+            <IoClose className="text-xl" />
+          </button>
+        </div>
+
+        <div className="px-5 py-5 space-y-6">
+          {/* Difficulty */}
+          <div>
+            <label className="text-sm font-medium block mb-3" style={{ color: C.fg }}>Difficulty</label>
+            <div className="flex gap-2">
+              {difficulties.map((d) => (
+                <button
+                  key={d.value}
+                  onClick={() => setDifficulty(d.value)}
+                  className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl transition-all duration-200 hover:scale-105"
+                  style={{
+                    background: difficulty === d.value ? C.primary : C.secondary,
+                    color: difficulty === d.value ? C.primaryFg : C.fg,
+                    border: `1.5px solid ${difficulty === d.value ? C.primary : C.border}`,
+                  }}
+                >
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: d.ducks }).map((_, i) => (
+                      <GiDuck key={`dd-${d.value}-${i}`} className="text-sm" />
+                    ))}
+                  </div>
+                  <span className="text-xs font-medium">{d.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Sound */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {soundOn ? (
+                <IoVolumeHigh className="text-lg" style={{ color: C.primary }} />
+              ) : (
+                <IoVolumeMute className="text-lg" style={{ color: C.mutedFg }} />
+              )}
+              <span className="text-sm font-medium" style={{ color: C.fg }}>Sound</span>
+            </div>
+            <button
+              onClick={() => setSoundOn((s) => !s)}
+              className="w-12 h-6 rounded-full relative transition-all duration-300"
+              style={{ background: soundOn ? C.primary : C.muted }}
+            >
+              <div
+                className="absolute top-0.5 w-5 h-5 rounded-full shadow-sm transition-all duration-300"
+                style={{ background: 'white', left: soundOn ? '26px' : '2px' }}
+              />
+            </button>
+          </div>
+
+          {/* Control mode */}
+          <div>
+            <label className="text-sm font-medium block mb-3" style={{ color: C.fg }}>Control Mode</label>
+            <div className="flex gap-2">
+              {(['swipe', 'tilt'] as const).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setControlMode(mode)}
+                  className="flex-1 py-3 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105"
+                  style={{
+                    background: controlMode === mode ? C.primary : C.secondary,
+                    color: controlMode === mode ? C.primaryFg : C.fg,
+                    border: `1.5px solid ${controlMode === mode ? C.primary : C.border}`,
+                  }}
+                >
+                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="px-5 pb-5">
+          <button
+            onClick={onClose}
+            className="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 shadow-md"
+            style={{ background: C.primary, color: C.primaryFg }}
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Tutorial Screen ────────────────────────────────────── */
+
+function TutorialScreen({
+  onNavigate,
+  onActiveAgentChange,
+}: {
+  onNavigate: (screen: Screen) => void
+  onActiveAgentChange: (id: string | null) => void
+}) {
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [narration, setNarration] = useState<string>('')
+  const [narration, setNarration] = useState('')
   const [emotion, setEmotion] = useState<Emotion>('happy')
   const [actionSuggestion, setActionSuggestion] = useState('')
-  const [activeAgentId, setActiveAgentId] = useState<string | null>(null)
 
   const steps = [
     {
       title: 'Steer the Gondola',
       description: 'Use the joystick to steer your gondola through the Venice canals.',
-      icon: <GiSailboat className="text-4xl" style={{ color: '#F97316' }} />,
+      icon: <GiSailboat className="text-5xl" style={{ color: C.primary }} />,
       agentMessage: 'Event type: tutorial. Step 1: The player is learning to steer the gondola through Venice canals for the first time.',
     },
     {
       title: 'Collect the Ducks',
       description: 'Float close to the ducks in the water to scoop them onto your gondola.',
-      icon: <GiDuck className="text-4xl" style={{ color: '#F97316' }} />,
+      icon: <GiDuck className="text-5xl" style={{ color: C.primary }} />,
       agentMessage: 'Event type: tutorial. Step 2: The player is learning how to collect ducks from the water onto the gondola.',
     },
     {
       title: 'Deliver to Beach',
       description: 'Take the rescued ducks to the sandy beach at the end of the canal.',
-      icon: <GiWaves className="text-4xl" style={{ color: '#E63B17' }} />,
+      icon: <GiWaves className="text-5xl" style={{ color: C.accent }} />,
       agentMessage: 'Event type: tutorial. Step 3: The player is learning how to deliver collected ducks safely to the beach.',
     },
   ]
@@ -532,7 +622,7 @@ function TutorialScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }
     setLoading(true)
     setNarration('')
     setActionSuggestion('')
-    setActiveAgentId(GAME_GUIDE_AGENT_ID)
+    onActiveAgentChange(GAME_GUIDE_AGENT_ID)
 
     try {
       const result = await callAIAgent(steps[stepIndex]?.agentMessage || '', GAME_GUIDE_AGENT_ID)
@@ -541,41 +631,26 @@ function TutorialScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }
         setNarration(data?.message || result?.response?.message || 'Let me tell you about this step...')
         setEmotion((data?.emotion as Emotion) || 'happy')
         setActionSuggestion(data?.action_suggestion || '')
+      } else {
+        setNarration('Oops, could not get narration right now. Try again!')
       }
     } catch {
       setNarration('Oops, could not get narration. Try again!')
     } finally {
       setLoading(false)
-      setActiveAgentId(null)
+      onActiveAgentChange(null)
     }
-  }, [])
-
-  const handleNext = () => {
-    if (step < steps.length - 1) {
-      setStep((s) => s + 1)
-      setNarration('')
-      setActionSuggestion('')
-    } else {
-      onNavigate('game')
-    }
-  }
-
-  const handlePrev = () => {
-    if (step > 0) {
-      setStep((s) => s - 1)
-      setNarration('')
-      setActionSuggestion('')
-    }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onActiveAgentChange])
 
   return (
-    <div className="min-h-screen flex flex-col relative" style={{ background: 'linear-gradient(to bottom, hsl(30 40% 98%), hsl(24 50% 93%))' }}>
+    <div className="min-h-screen flex flex-col relative" style={{ background: `linear-gradient(to bottom, ${C.bg}, ${C.secondary})` }}>
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid hsl(30 35% 88%)' }}>
-        <button onClick={() => onNavigate('menu')} className="p-2 rounded-xl" style={{ color: 'hsl(20 25% 45%)' }}>
+      <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: `1px solid ${C.border}` }}>
+        <button onClick={() => onNavigate('menu')} className="p-2 rounded-xl" style={{ color: C.mutedFg }}>
           <IoArrowBack className="text-xl" />
         </button>
-        <h2 className="text-base font-semibold" style={{ color: 'hsl(20 40% 10%)' }}>Tutorial</h2>
+        <h2 className="text-base font-semibold" style={{ color: C.fg }}>Tutorial</h2>
         <div className="w-8" />
       </div>
 
@@ -586,30 +661,30 @@ function TutorialScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }
             <div
               key={`prog-${i}`}
               className="flex-1 h-1.5 rounded-full transition-all duration-500"
-              style={{ background: i <= step ? 'hsl(24 95% 53%)' : 'hsl(30 30% 90%)' }}
+              style={{ background: i <= step ? C.primary : C.muted }}
             />
           ))}
         </div>
-        <p className="text-xs mt-1.5 font-medium" style={{ color: 'hsl(20 25% 45%)' }}>
+        <p className="text-xs mt-1.5 font-medium" style={{ color: C.mutedFg }}>
           Step {step + 1} of {steps.length}
         </p>
       </div>
 
       {/* Step content */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-8">
-        <div className="da-float-anim mb-6">
+        <div className="mb-6" style={{ animation: 'da-float 3s ease-in-out infinite' }}>
           {currentStep?.icon}
         </div>
 
-        <h3 className="text-2xl font-bold mb-2 text-center" style={{ color: 'hsl(20 40% 10%)' }}>
+        <h3 className="text-2xl font-bold mb-2 text-center" style={{ color: C.fg }}>
           {currentStep?.title}
         </h3>
-        <p className="text-sm text-center mb-6 max-w-sm" style={{ color: 'hsl(20 25% 45%)' }}>
+        <p className="text-sm text-center mb-6 max-w-sm" style={{ color: C.mutedFg }}>
           {currentStep?.description}
         </p>
 
         {/* Hand pointer hint */}
-        <div className="da-hand-anim mb-6 flex items-center gap-2" style={{ color: 'hsl(20 25% 45%)' }}>
+        <div className="mb-6 flex items-center gap-2" style={{ color: C.mutedFg, animation: 'da-hand-point 1.5s ease-in-out infinite' }}>
           <FiChevronRight className="text-lg" />
           <span className="text-xs font-medium">Tap below to hear from your guide</span>
         </div>
@@ -620,7 +695,7 @@ function TutorialScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }
             <button
               onClick={() => fetchNarration(step)}
               className="w-full py-3 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 shadow-md"
-              style={{ background: 'hsl(24 95% 53%)', color: 'hsl(30 40% 98%)' }}
+              style={{ background: C.primary, color: C.primaryFg }}
             >
               Ask Guide for Tips
             </button>
@@ -629,17 +704,20 @@ function TutorialScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }
           {loading && <LoadingDuck />}
 
           {narration && !loading && (
-            <div className="da-bubble-anim rounded-2xl px-4 py-4 shadow-md" style={{ background: 'hsl(30 40% 96%)', border: '1px solid hsl(30 35% 88%)' }}>
+            <div
+              className="rounded-2xl px-4 py-4 shadow-md"
+              style={{ background: C.card, border: `1px solid ${C.border}`, animation: 'da-bubble-in 0.4s ease-out forwards' }}
+            >
               <div className="flex items-center gap-2 mb-2">
-                <GiDuck style={{ color: '#F97316' }} />
+                <GiDuck style={{ color: C.primary }} />
                 <span className="text-base">{getEmotionIcon(emotion)}</span>
-                <span className="text-xs font-medium" style={{ color: 'hsl(20 25% 45%)' }}>{getEmotionLabel(emotion)}</span>
+                <span className="text-xs font-medium" style={{ color: C.mutedFg }}>{getEmotionLabel(emotion)}</span>
               </div>
-              <div style={{ color: 'hsl(20 40% 10%)' }}>
+              <div style={{ color: C.fg }}>
                 {renderMarkdown(narration)}
               </div>
               {actionSuggestion && (
-                <div className="mt-2 flex items-center gap-1.5 text-xs font-medium" style={{ color: '#F97316' }}>
+                <div className="mt-2 flex items-center gap-1.5 text-xs font-medium" style={{ color: C.primary }}>
                   <FiArrowRight className="flex-shrink-0" />
                   <span>{actionSuggestion}</span>
                 </div>
@@ -650,19 +728,33 @@ function TutorialScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }
       </div>
 
       {/* Navigation buttons */}
-      <div className="flex gap-3 px-6 pb-8">
+      <div className="flex gap-3 px-6 pb-16">
         <button
-          onClick={handlePrev}
+          onClick={() => {
+            if (step > 0) {
+              setStep((s) => s - 1)
+              setNarration('')
+              setActionSuggestion('')
+            }
+          }}
           disabled={step === 0}
           className="flex-1 py-3 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-30 disabled:hover:scale-100"
-          style={{ background: 'hsl(30 35% 92%)', color: 'hsl(20 40% 10%)' }}
+          style={{ background: C.secondary, color: C.fg }}
         >
           Back
         </button>
         <button
-          onClick={handleNext}
+          onClick={() => {
+            if (step < steps.length - 1) {
+              setStep((s) => s + 1)
+              setNarration('')
+              setActionSuggestion('')
+            } else {
+              onNavigate('game')
+            }
+          }}
           className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 shadow-md"
-          style={{ background: 'hsl(24 95% 53%)', color: 'hsl(30 40% 98%)' }}
+          style={{ background: C.primary, color: C.primaryFg }}
         >
           {step < steps.length - 1 ? 'Next' : 'Start Playing!'}
         </button>
@@ -671,7 +763,7 @@ function TutorialScreen({ onNavigate }: { onNavigate: (screen: Screen) => void }
   )
 }
 
-// ─── Game Over Screen ───────────────────────────────────────
+/* ─── Game Over Screen ───────────────────────────────────── */
 
 function GameOverScreen({
   ducksSaved,
@@ -692,15 +784,17 @@ function GameOverScreen({
   const stars = messagesCount >= 6 ? 3 : messagesCount >= 3 ? 2 : 1
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-6" style={{ background: 'linear-gradient(to bottom, hsl(30 50% 96%), hsl(24 70% 90%), hsl(12 60% 85%))' }}>
-      {/* Confetti layer */}
+    <div
+      className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-6"
+      style={{ background: `linear-gradient(to bottom, ${C.bg}, ${C.secondary}, ${C.muted})` }}
+    >
       <ConfettiBurst />
 
       <div className="text-center z-10">
-        <h1 className="text-4xl font-bold mb-2" style={{ color: 'hsl(20 40% 10%)' }}>
+        <h1 className="text-4xl font-bold mb-2" style={{ color: C.fg }}>
           Great Job, Captain!
         </h1>
-        <p className="text-base mb-6" style={{ color: 'hsl(20 25% 45%)' }}>
+        <p className="text-base mb-6" style={{ color: C.mutedFg }}>
           What an amazing adventure!
         </p>
 
@@ -708,36 +802,42 @@ function GameOverScreen({
         <div className="flex items-center justify-center gap-2 mb-6">
           {Array.from({ length: 3 }).map((_, i) =>
             i < stars ? (
-              <AiFillStar key={`star-${i}`} className="text-4xl" style={{ color: '#FBBF24', animationDelay: `${i * 0.2}s` }} />
+              <AiFillStar key={`star-${i}`} className="text-4xl" style={{ color: '#FBBF24' }} />
             ) : (
-              <AiOutlineStar key={`star-${i}`} className="text-4xl" style={{ color: 'hsl(30 30% 90%)' }} />
+              <AiOutlineStar key={`star-${i}`} className="text-4xl" style={{ color: C.muted }} />
             )
           )}
         </div>
 
         {/* Stats */}
         <div className="flex gap-6 justify-center mb-8">
-          <div className="flex flex-col items-center gap-1 px-5 py-4 rounded-2xl shadow-md" style={{ background: 'rgba(246,240,234,0.85)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.18)' }}>
-            <GiDuck className="text-2xl" style={{ color: '#F97316' }} />
-            <span className="text-2xl font-bold" style={{ color: 'hsl(20 40% 10%)' }}>{ducksSaved}</span>
-            <span className="text-xs font-medium" style={{ color: 'hsl(20 25% 45%)' }}>Ducks Saved</span>
+          <div
+            className="flex flex-col items-center gap-1 px-5 py-4 rounded-2xl shadow-md"
+            style={{ background: 'rgba(246,240,234,0.85)', backdropFilter: 'blur(16px)', border: `1px solid rgba(255,255,255,0.18)` }}
+          >
+            <GiDuck className="text-2xl" style={{ color: C.primary }} />
+            <span className="text-2xl font-bold" style={{ color: C.fg }}>{ducksSaved}</span>
+            <span className="text-xs font-medium" style={{ color: C.mutedFg }}>Ducks Saved</span>
           </div>
-          <div className="flex flex-col items-center gap-1 px-5 py-4 rounded-2xl shadow-md" style={{ background: 'rgba(246,240,234,0.85)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.18)' }}>
+          <div
+            className="flex flex-col items-center gap-1 px-5 py-4 rounded-2xl shadow-md"
+            style={{ background: 'rgba(246,240,234,0.85)', backdropFilter: 'blur(16px)', border: `1px solid rgba(255,255,255,0.18)` }}
+          >
             <BsFillTrophyFill className="text-2xl" style={{ color: '#FBBF24' }} />
-            <span className="text-2xl font-bold" style={{ color: 'hsl(20 40% 10%)' }}>{messagesCount}</span>
-            <span className="text-xs font-medium" style={{ color: 'hsl(20 25% 45%)' }}>Interactions</span>
+            <span className="text-2xl font-bold" style={{ color: C.fg }}>{messagesCount}</span>
+            <span className="text-xs font-medium" style={{ color: C.mutedFg }}>Interactions</span>
           </div>
         </div>
 
         {/* Duck parade */}
         {paradeStarted && (
           <div className="relative w-64 h-10 mx-auto mb-8 overflow-hidden">
-            <div className="da-parade-anim absolute top-0 left-0 flex gap-3">
-              <GiDuck className="text-2xl" style={{ color: '#F97316' }} />
+            <div className="absolute top-0 left-0 flex gap-3" style={{ animation: 'da-duck-parade 6s linear infinite' }}>
+              <GiDuck className="text-2xl" style={{ color: C.primary }} />
               <GiDuck className="text-xl" style={{ color: '#FB923C' }} />
               <GiDuck className="text-2xl" style={{ color: '#F59E0B' }} />
               <GiDuck className="text-lg" style={{ color: '#FBBF24' }} />
-              <GiDuck className="text-2xl" style={{ color: '#F97316' }} />
+              <GiDuck className="text-2xl" style={{ color: C.primary }} />
             </div>
           </div>
         )}
@@ -747,14 +847,14 @@ function GameOverScreen({
           <button
             onClick={() => onNavigate('game')}
             className="py-3 rounded-2xl text-base font-semibold shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
-            style={{ background: 'hsl(24 95% 53%)', color: 'hsl(30 40% 98%)' }}
+            style={{ background: C.primary, color: C.primaryFg }}
           >
             Play Again
           </button>
           <button
             onClick={() => onNavigate('menu')}
             className="py-3 rounded-2xl text-base font-medium transition-all duration-200 hover:scale-105 active:scale-95"
-            style={{ background: 'hsl(30 35% 92%)', color: 'hsl(20 40% 10%)', border: '1.5px solid hsl(30 35% 88%)' }}
+            style={{ background: C.secondary, color: C.fg, border: `1.5px solid ${C.border}` }}
           >
             Main Menu
           </button>
@@ -766,146 +866,23 @@ function GameOverScreen({
   )
 }
 
-// ─── Settings Panel ─────────────────────────────────────────
-
-function SettingsPanel({ onClose }: { onClose: () => void }) {
-  const [difficulty, setDifficulty] = useState<Difficulty>('easy')
-  const [soundOn, setSoundOn] = useState(true)
-  const [controlMode, setControlMode] = useState<'swipe' | 'tilt'>('swipe')
-
-  const difficulties: { value: Difficulty; label: string; ducks: number }[] = [
-    { value: 'easy', label: 'Easy', ducks: 1 },
-    { value: 'medium', label: 'Medium', ducks: 2 },
-    { value: 'hard', label: 'Hard', ducks: 3 },
-  ]
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(26,16,8,0.5)', backdropFilter: 'blur(8px)' }}>
-      <div className="w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden" style={{ background: 'hsl(30 40% 98%)', border: '1px solid hsl(30 35% 88%)' }}>
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid hsl(30 35% 88%)' }}>
-          <div className="flex items-center gap-2">
-            <IoSettingsSharp className="text-lg" style={{ color: '#F97316' }} />
-            <h3 className="text-lg font-semibold" style={{ color: 'hsl(20 40% 10%)' }}>Settings</h3>
-          </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg transition-all hover:scale-110" style={{ color: 'hsl(20 25% 45%)' }}>
-            <IoClose className="text-xl" />
-          </button>
-        </div>
-
-        <div className="px-5 py-5 space-y-6">
-          {/* Difficulty */}
-          <div>
-            <label className="text-sm font-medium block mb-3" style={{ color: 'hsl(20 40% 10%)' }}>Difficulty</label>
-            <div className="flex gap-2">
-              {difficulties.map((d) => (
-                <button
-                  key={d.value}
-                  onClick={() => setDifficulty(d.value)}
-                  className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl transition-all duration-200 hover:scale-105"
-                  style={{
-                    background: difficulty === d.value ? 'hsl(24 95% 53%)' : 'hsl(30 35% 92%)',
-                    color: difficulty === d.value ? 'hsl(30 40% 98%)' : 'hsl(20 40% 10%)',
-                    border: `1.5px solid ${difficulty === d.value ? 'hsl(24 95% 53%)' : 'hsl(30 35% 88%)'}`,
-                  }}
-                >
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: d.ducks }).map((_, i) => (
-                      <GiDuck key={`dd-${d.value}-${i}`} className="text-sm" />
-                    ))}
-                  </div>
-                  <span className="text-xs font-medium">{d.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Sound */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {soundOn ? (
-                <IoVolumeHigh className="text-lg" style={{ color: '#F97316' }} />
-              ) : (
-                <IoVolumeMute className="text-lg" style={{ color: 'hsl(20 25% 45%)' }} />
-              )}
-              <span className="text-sm font-medium" style={{ color: 'hsl(20 40% 10%)' }}>Sound</span>
-            </div>
-            <button
-              onClick={() => setSoundOn((s) => !s)}
-              className="w-12 h-6 rounded-full relative transition-all duration-300"
-              style={{ background: soundOn ? 'hsl(24 95% 53%)' : 'hsl(30 30% 90%)' }}
-            >
-              <div
-                className="absolute top-0.5 w-5 h-5 rounded-full shadow-sm transition-all duration-300"
-                style={{
-                  background: 'white',
-                  left: soundOn ? '26px' : '2px',
-                }}
-              />
-            </button>
-          </div>
-
-          {/* Control mode */}
-          <div>
-            <label className="text-sm font-medium block mb-3" style={{ color: 'hsl(20 40% 10%)' }}>Control Mode</label>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setControlMode('swipe')}
-                className="flex-1 py-3 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105"
-                style={{
-                  background: controlMode === 'swipe' ? 'hsl(24 95% 53%)' : 'hsl(30 35% 92%)',
-                  color: controlMode === 'swipe' ? 'hsl(30 40% 98%)' : 'hsl(20 40% 10%)',
-                  border: `1.5px solid ${controlMode === 'swipe' ? 'hsl(24 95% 53%)' : 'hsl(30 35% 88%)'}`,
-                }}
-              >
-                Swipe
-              </button>
-              <button
-                onClick={() => setControlMode('tilt')}
-                className="flex-1 py-3 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105"
-                style={{
-                  background: controlMode === 'tilt' ? 'hsl(24 95% 53%)' : 'hsl(30 35% 92%)',
-                  color: controlMode === 'tilt' ? 'hsl(30 40% 98%)' : 'hsl(20 40% 10%)',
-                  border: `1.5px solid ${controlMode === 'tilt' ? 'hsl(24 95% 53%)' : 'hsl(30 35% 88%)'}`,
-                }}
-              >
-                Tilt
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="px-5 pb-5">
-          <button
-            onClick={onClose}
-            className="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 shadow-md"
-            style={{ background: 'hsl(24 95% 53%)', color: 'hsl(30 40% 98%)' }}
-          >
-            Done
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── Agent Info Footer ──────────────────────────────────────
+/* ─── Agent Info Footer ──────────────────────────────────── */
 
 function AgentInfoFooter({ activeAgentId }: { activeAgentId: string | null }) {
   return (
-    <div className="px-4 py-3" style={{ background: 'hsl(30 40% 96%)', borderTop: '1px solid hsl(30 35% 88%)' }}>
+    <div className="px-4 py-3" style={{ background: C.card, borderTop: `1px solid ${C.border}` }}>
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
           <div
             className="w-2 h-2 rounded-full flex-shrink-0"
-            style={{ background: activeAgentId === GAME_GUIDE_AGENT_ID ? '#22C55E' : 'hsl(30 30% 90%)' }}
+            style={{ background: activeAgentId === GAME_GUIDE_AGENT_ID ? '#22C55E' : C.muted }}
           />
-          <span className="text-xs font-medium" style={{ color: 'hsl(20 40% 10%)' }}>Game Guide Agent</span>
+          <span className="text-xs font-medium" style={{ color: C.fg }}>Game Guide Agent</span>
         </div>
-        <span className="text-xs" style={{ color: 'hsl(20 25% 45%)' }}>
+        <span className="text-xs" style={{ color: C.mutedFg }}>
           {activeAgentId === GAME_GUIDE_AGENT_ID ? 'Active' : 'Ready'}
         </span>
-        <span className="text-xs ml-auto opacity-50" style={{ color: 'hsl(20 25% 45%)' }}>
+        <span className="text-xs ml-auto opacity-50" style={{ color: C.mutedFg }}>
           Hints, encouragement, and narration
         </span>
       </div>
@@ -913,134 +890,9 @@ function AgentInfoFooter({ activeAgentId }: { activeAgentId: string | null }) {
   )
 }
 
-// ─── ErrorBoundary ──────────────────────────────────────────
+/* ─── Game Screen ────────────────────────────────────────── */
 
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean; error: string }
-> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props)
-    this.state = { hasError: false, error: '' }
-  }
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error: error.message }
-  }
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen flex items-center justify-center" style={{ background: 'hsl(30 40% 98%)', color: 'hsl(20 40% 10%)' }}>
-          <div className="text-center p-8 max-w-md">
-            <GiDuck className="text-5xl mx-auto mb-4" style={{ color: '#F97316' }} />
-            <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
-            <p className="text-sm mb-4" style={{ color: 'hsl(20 25% 45%)' }}>{this.state.error}</p>
-            <button
-              onClick={() => this.setState({ hasError: false, error: '' })}
-              className="px-6 py-2.5 rounded-xl text-sm font-medium shadow-md"
-              style={{ background: 'hsl(24 95% 53%)', color: 'hsl(30 40% 98%)' }}
-            >
-              Try again
-            </button>
-          </div>
-        </div>
-      )
-    }
-    return this.props.children
-  }
-}
-
-// ─── Main Page ──────────────────────────────────────────────
-
-export default function Page() {
-  const [screen, setScreen] = useState<Screen>('menu')
-  const [sampleData, setSampleData] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
-  const [ducksSaved, setDucksSaved] = useState(0)
-  const [messagesCount, setMessagesCount] = useState(0)
-  const [activeAgentId, setActiveAgentId] = useState<string | null>(null)
-
-  const handleNavigate = useCallback((newScreen: Screen) => {
-    setScreen(newScreen)
-  }, [])
-
-  return (
-    <ErrorBoundary>
-      <div style={THEME_VARS} className="min-h-screen relative font-sans" >
-        <AnimationStyles />
-
-        {/* Sample Data Toggle */}
-        <div className="fixed top-3 right-3 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full shadow-md" style={{ background: 'rgba(246,240,234,0.9)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.18)' }}>
-          <span className="text-xs font-medium" style={{ color: 'hsl(20 25% 45%)' }}>Sample Data</span>
-          <button
-            onClick={() => setSampleData((s) => !s)}
-            className="w-10 h-5 rounded-full relative transition-all duration-300"
-            style={{ background: sampleData ? 'hsl(24 95% 53%)' : 'hsl(30 30% 90%)' }}
-          >
-            <div
-              className="absolute top-0.5 w-4 h-4 rounded-full shadow-sm transition-all duration-300"
-              style={{
-                background: 'white',
-                left: sampleData ? '22px' : '2px',
-              }}
-            />
-          </button>
-        </div>
-
-        {/* Settings Modal */}
-        {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
-
-        {/* Screen Router */}
-        {screen === 'menu' && (
-          <MenuScreenWrapper
-            onNavigate={(s) => {
-              if (s === 'menu') {
-                // Settings button in menu
-                setShowSettings(true)
-              } else {
-                handleNavigate(s)
-              }
-            }}
-          />
-        )}
-
-        {screen === 'game' && (
-          <GameScreenWrapper
-            onNavigate={handleNavigate}
-            sampleData={sampleData}
-            onDucksSavedChange={setDucksSaved}
-            onMessagesCountChange={setMessagesCount}
-            onActiveAgentChange={setActiveAgentId}
-          />
-        )}
-
-        {screen === 'tutorial' && (
-          <TutorialScreen onNavigate={handleNavigate} />
-        )}
-
-        {screen === 'gameover' && (
-          <GameOverScreen
-            ducksSaved={ducksSaved}
-            messagesCount={messagesCount}
-            onNavigate={handleNavigate}
-          />
-        )}
-
-        {/* Agent Info Footer */}
-        <div className="fixed bottom-0 left-0 right-0 z-40">
-          <AgentInfoFooter activeAgentId={activeAgentId} />
-        </div>
-      </div>
-    </ErrorBoundary>
-  )
-}
-
-// ─── Wrappers to lift state ─────────────────────────────────
-
-function MenuScreenWrapper({ onNavigate }: { onNavigate: (screen: Screen) => void }) {
-  return <MenuScreen onNavigate={onNavigate} />
-}
-
-function GameScreenWrapper({
+function GameScreen({
   onNavigate,
   sampleData,
   onDucksSavedChange,
@@ -1061,7 +913,6 @@ function GameScreenWrapper({
   const [lives, setLives] = useState(4)
   const [ducksSaved, setDucksSaved] = useState(0)
   const [ducksOnGondola, setDucksOnGondola] = useState(0)
-  const [showSettings, setShowSettings] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -1077,7 +928,8 @@ function GameScreenWrapper({
   }, [ducksSaved, onDucksSavedChange])
 
   useEffect(() => {
-    onMessagesCountChange(messages.filter((m) => m.role === 'guide').length)
+    const guideCount = Array.isArray(messages) ? messages.filter((m) => m.role === 'guide').length : 0
+    onMessagesCountChange(guideCount)
   }, [messages, onMessagesCountChange])
 
   useEffect(() => {
@@ -1138,69 +990,83 @@ function GameScreenWrapper({
   }
 
   return (
-    <div className="min-h-screen flex flex-col relative pb-12" style={{ background: 'linear-gradient(to bottom, hsl(30 40% 98%), hsl(30 40% 96%))' }}>
+    <div className="min-h-screen flex flex-col relative pb-12" style={{ background: `linear-gradient(to bottom, ${C.bg}, ${C.card})` }}>
       {/* HUD */}
-      <div className="flex items-center justify-between px-4 py-3 shadow-sm sticky top-0 z-30" style={{ background: 'rgba(246,240,234,0.92)', backdropFilter: 'blur(16px)', borderBottom: '1px solid hsl(30 35% 88%)' }}>
-        <button onClick={() => onNavigate('menu')} className="p-2 rounded-xl transition-all hover:scale-110" style={{ color: 'hsl(20 25% 45%)' }}>
+      <div
+        className="flex items-center justify-between px-4 py-3 shadow-sm sticky top-0 z-30"
+        style={{ background: 'rgba(246,240,234,0.92)', backdropFilter: 'blur(16px)', borderBottom: `1px solid ${C.border}` }}
+      >
+        <button onClick={() => onNavigate('menu')} className="p-2 rounded-xl transition-all hover:scale-110" style={{ color: C.mutedFg }}>
           <IoArrowBack className="text-xl" />
         </button>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1">
             {Array.from({ length: 4 }).map((_, i) => (
-              <AiFillHeart key={`h-${i}`} className="text-lg" style={{ color: i < lives ? '#E63B17' : 'hsl(30 30% 90%)' }} />
+              <AiFillHeart key={`h-${i}`} className="text-lg" style={{ color: i < lives ? C.accent : C.muted }} />
             ))}
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-full" style={{ background: 'rgba(249,115,22,0.1)' }}>
-            <GiDuck className="text-base" style={{ color: '#F97316' }} />
-            <span className="text-sm font-semibold" style={{ color: '#F97316' }}>{ducksSaved}</span>
+            <GiDuck className="text-base" style={{ color: C.primary }} />
+            <span className="text-sm font-semibold" style={{ color: C.primary }}>{ducksSaved}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => handleSendMessage('hint', 'I need help! What should I do next?')} className="da-pulse-anim p-2 rounded-xl transition-all hover:scale-110" style={{ color: '#F97316' }}>
+          <button
+            onClick={() => handleSendMessage('hint', 'I need help! What should I do next?')}
+            className="p-2 rounded-xl transition-all hover:scale-110"
+            style={{ color: C.primary, animation: 'da-pulse-glow 2s ease-in-out infinite' }}
+          >
             <IoHelpCircle className="text-xl" />
           </button>
-          <button onClick={() => onNavigate('gameover')} className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover:scale-105" style={{ background: 'hsl(30 35% 92%)', color: 'hsl(20 25% 45%)' }}>
+          <button
+            onClick={() => onNavigate('gameover')}
+            className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover:scale-105"
+            style={{ background: C.secondary, color: C.mutedFg }}
+          >
             End
           </button>
         </div>
       </div>
 
-      {/* Settings overlay */}
-      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
-
       {/* Messages area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4" style={{ paddingBottom: '200px' }}>
-        {messages.length === 0 && !loading && (
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4" style={{ paddingBottom: '220px' }}>
+        {Array.isArray(messages) && messages.length === 0 && !loading && (
           <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
-            <div className="da-float-anim">
-              <GiDuck className="text-6xl" style={{ color: 'hsl(30 35% 88%)' }} />
+            <div style={{ animation: 'da-float 3s ease-in-out infinite' }}>
+              <GiDuck className="text-6xl" style={{ color: C.border }} />
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-1" style={{ color: 'hsl(20 40% 10%)' }}>Ready for adventure!</h3>
-              <p className="text-sm max-w-xs" style={{ color: 'hsl(20 25% 45%)' }}>
+              <h3 className="text-lg font-semibold mb-1" style={{ color: C.fg }}>Ready for adventure!</h3>
+              <p className="text-sm max-w-xs" style={{ color: C.mutedFg }}>
                 Choose an event type below and ask your game guide for help, hints, or celebrations.
               </p>
             </div>
           </div>
         )}
 
-        {messages.map((msg) => (
+        {Array.isArray(messages) && messages.map((msg) => (
           <SpeechBubble key={msg.id} msg={msg} />
         ))}
 
         {loading && <LoadingDuck />}
 
         {error && (
-          <div className="da-bubble-anim flex justify-start mb-3">
-            <div className="max-w-xs rounded-2xl px-4 py-3 shadow-md" style={{ background: 'hsl(0 70% 96%)', border: '1px solid hsl(0 60% 90%)' }}>
-              <p className="text-sm" style={{ color: 'hsl(0 60% 40%)' }}>{error}</p>
+          <div className="flex justify-start mb-3" style={{ animation: 'da-bubble-in 0.4s ease-out forwards' }}>
+            <div
+              className="max-w-xs rounded-2xl px-4 py-3 shadow-md"
+              style={{ background: '#FEF2F2', border: '1px solid #FECACA' }}
+            >
+              <p className="text-sm" style={{ color: '#991B1B' }}>{error}</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Input area - fixed at bottom */}
-      <div className="fixed bottom-12 left-0 right-0 border-t px-4 py-3 space-y-3 z-20" style={{ background: 'rgba(251,248,245,0.95)', backdropFilter: 'blur(16px)', borderColor: 'hsl(30 35% 88%)' }}>
+      <div
+        className="fixed bottom-12 left-0 right-0 border-t px-4 py-3 space-y-3 z-20"
+        style={{ background: 'rgba(251,248,245,0.95)', backdropFilter: 'blur(16px)', borderColor: C.border }}
+      >
         <EventTypePicker selected={selectedEvent} onSelect={setSelectedEvent} />
 
         <div className="flex gap-2">
@@ -1211,35 +1077,261 @@ function GameScreenWrapper({
             onKeyDown={(e) => { if (e.key === 'Enter' && selectedEvent && !loading) handleSubmit() }}
             placeholder={selectedEvent ? 'Describe your situation (optional)...' : 'Pick an event type first'}
             className="flex-1 px-4 py-2.5 rounded-xl text-sm outline-none transition-all"
-            style={{ background: 'hsl(30 40% 98%)', border: '1.5px solid hsl(30 35% 88%)', color: 'hsl(20 40% 10%)' }}
+            style={{ background: C.bg, border: `1.5px solid ${C.border}`, color: C.fg }}
             disabled={!selectedEvent || loading}
           />
           <button
             onClick={handleSubmit}
             disabled={!selectedEvent || loading}
             className="px-4 py-2.5 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100"
-            style={{ background: selectedEvent ? 'hsl(24 95% 53%)' : 'hsl(30 30% 90%)', color: selectedEvent ? 'hsl(30 40% 98%)' : 'hsl(20 25% 45%)' }}
+            style={{ background: selectedEvent ? C.primary : C.muted, color: selectedEvent ? C.primaryFg : C.mutedFg }}
           >
             <FiSend className="text-lg" />
           </button>
         </div>
 
         {/* Game state controls */}
-        <div className="flex items-center justify-between text-xs" style={{ color: 'hsl(20 25% 45%)' }}>
+        <div className="flex items-center justify-between text-xs" style={{ color: C.mutedFg }}>
           <div className="flex gap-2">
-            <button onClick={() => setDucksOnGondola((p) => p + 1)} className="px-2 py-1 rounded-lg transition-all hover:scale-105" style={{ background: 'rgba(249,115,22,0.08)' }}>
+            <button
+              onClick={() => setDucksOnGondola((p) => Math.min(p + 1, 2))}
+              className="px-2 py-1 rounded-lg transition-all hover:scale-105"
+              style={{ background: 'rgba(249,115,22,0.08)' }}
+            >
               +Duck on boat
             </button>
-            <button onClick={() => setDucksSaved((p) => p + 1)} className="px-2 py-1 rounded-lg transition-all hover:scale-105" style={{ background: 'rgba(249,115,22,0.08)' }}>
+            <button
+              onClick={() => setDucksSaved((p) => p + 1)}
+              className="px-2 py-1 rounded-lg transition-all hover:scale-105"
+              style={{ background: 'rgba(249,115,22,0.08)' }}
+            >
               +Duck saved
             </button>
-            <button onClick={() => setLives((p) => Math.max(0, p - 1))} className="px-2 py-1 rounded-lg transition-all hover:scale-105" style={{ background: 'rgba(230,59,23,0.08)' }}>
+            <button
+              onClick={() => setLives((p) => Math.max(0, p - 1))}
+              className="px-2 py-1 rounded-lg transition-all hover:scale-105"
+              style={{ background: 'rgba(230,59,23,0.08)' }}
+            >
               -Life
             </button>
           </div>
-          <span className="opacity-70">Gondola: {ducksOnGondola}</span>
+          <span className="opacity-70">Gondola: {ducksOnGondola}/2</span>
         </div>
       </div>
     </div>
+  )
+}
+
+/* ─── Menu Screen ────────────────────────────────────────── */
+
+function MenuScreen({
+  onPlay,
+  onTutorial,
+  onSettings,
+}: {
+  onPlay: () => void
+  onTutorial: () => void
+  onSettings: () => void
+}) {
+  return (
+    <div
+      className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4"
+      style={{ background: `linear-gradient(to bottom, #F9F0E6, #F5D5B8, #F0C4AE)` }}
+    >
+      {/* Sun glow */}
+      <div
+        className="absolute top-8 right-8 w-20 h-20 rounded-full opacity-60"
+        style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.5), rgba(249,115,22,0.1), transparent)', filter: 'blur(10px)' }}
+      />
+
+      {/* Decorative icons */}
+      <div className="absolute top-16 left-8 opacity-30" style={{ animation: 'da-float 3s ease-in-out infinite' }}>
+        <GiLighthouse className="text-4xl" style={{ color: C.accent }} />
+      </div>
+      <div className="absolute top-24 right-16 opacity-30" style={{ animation: 'da-sparkle 2s ease-in-out infinite' }}>
+        <BsStars className="text-2xl" style={{ color: C.primary }} />
+      </div>
+
+      {/* Main title */}
+      <div className="text-center mb-2 z-10" style={{ animation: 'da-title-float 3s ease-in-out infinite' }}>
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <GiDuck className="text-5xl" style={{ color: C.primary }} />
+          <GiSailboat className="text-4xl" style={{ color: C.accent, animation: 'da-float 3s ease-in-out infinite' }} />
+        </div>
+        <h1 className="text-5xl sm:text-6xl font-bold tracking-tight" style={{ color: C.fg, letterSpacing: '-0.02em' }}>
+          Ducks Ahoy!
+        </h1>
+        <p className="text-lg sm:text-xl mt-2 font-medium" style={{ color: C.mutedFg }}>
+          Venice Gondola Adventure
+        </p>
+      </div>
+
+      {/* Gondola silhouette */}
+      <div className="mt-4 mb-8 z-10" style={{ animation: 'da-float 3s ease-in-out infinite' }}>
+        <div className="flex items-end gap-0">
+          <MdWaves className="text-2xl" style={{ color: 'rgba(249,115,22,0.4)' }} />
+          <GiSailboat className="text-5xl -mb-1" style={{ color: C.fg }} />
+          <MdWaves className="text-2xl" style={{ color: 'rgba(249,115,22,0.4)' }} />
+        </div>
+      </div>
+
+      {/* Menu buttons */}
+      <div className="flex flex-col gap-4 w-full max-w-xs z-10">
+        <button
+          onClick={onPlay}
+          className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-lg font-semibold shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+          style={{ background: C.primary, color: C.primaryFg, animation: 'da-pulse-glow 2s ease-in-out infinite' }}
+        >
+          <IoPlay className="text-xl" />
+          <span>Play</span>
+        </button>
+        <button
+          onClick={onTutorial}
+          className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-lg font-semibold shadow-md transition-all duration-200 hover:scale-105 active:scale-95"
+          style={{ background: C.card, color: C.fg, border: `2px solid ${C.border}` }}
+        >
+          <GiSailboat className="text-xl" style={{ color: C.primary }} />
+          <span>Tutorial</span>
+        </button>
+        <button
+          onClick={onSettings}
+          className="flex items-center justify-center gap-3 px-6 py-3 rounded-2xl text-base font-medium shadow-sm transition-all duration-200 hover:scale-105 active:scale-95"
+          style={{ background: C.secondary, color: C.mutedFg }}
+        >
+          <IoSettingsSharp className="text-lg" />
+          <span>Settings</span>
+        </button>
+      </div>
+
+      {/* Anchor decoration */}
+      <div className="mt-8 z-10 opacity-20">
+        <GiAnchor className="text-3xl" style={{ color: C.fg }} />
+      </div>
+
+      <WaterRipples />
+    </div>
+  )
+}
+
+/* ─── Error Boundary ─────────────────────────────────────── */
+
+class PageErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: string }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props)
+    this.state = { hasError: false, error: '' }
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error: error.message }
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center" style={{ background: C.bg, color: C.fg }}>
+          <div className="text-center p-8 max-w-md">
+            <GiDuck className="text-5xl mx-auto mb-4" style={{ color: C.primary }} />
+            <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
+            <p className="text-sm mb-4" style={{ color: C.mutedFg }}>{this.state.error}</p>
+            <button
+              onClick={() => this.setState({ hasError: false, error: '' })}
+              className="px-6 py-2.5 rounded-xl text-sm font-medium shadow-md"
+              style={{ background: C.primary, color: C.primaryFg }}
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
+/* ─── Main Page ──────────────────────────────────────────── */
+
+export default function Page() {
+  const [screen, setScreen] = useState<Screen>('menu')
+  const [sampleData, setSampleData] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+  const [ducksSaved, setDucksSaved] = useState(0)
+  const [messagesCount, setMessagesCount] = useState(0)
+  const [activeAgentId, setActiveAgentId] = useState<string | null>(null)
+
+  const handleNavigate = useCallback((newScreen: Screen) => {
+    setScreen(newScreen)
+  }, [])
+
+  const handleActiveAgentChange = useCallback((id: string | null) => {
+    setActiveAgentId(id)
+  }, [])
+
+  return (
+    <PageErrorBoundary>
+      <div className="min-h-screen relative font-sans">
+        <AnimationStyles />
+
+        {/* Sample Data Toggle */}
+        <div
+          className="fixed top-3 right-3 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full shadow-md"
+          style={{ background: 'rgba(246,240,234,0.9)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.18)' }}
+        >
+          <span className="text-xs font-medium" style={{ color: C.mutedFg }}>Sample Data</span>
+          <button
+            onClick={() => setSampleData((s) => !s)}
+            className="w-10 h-5 rounded-full relative transition-all duration-300"
+            style={{ background: sampleData ? C.primary : C.muted }}
+          >
+            <div
+              className="absolute top-0.5 w-4 h-4 rounded-full shadow-sm transition-all duration-300"
+              style={{ background: 'white', left: sampleData ? '22px' : '2px' }}
+            />
+          </button>
+        </div>
+
+        {/* Settings Modal */}
+        {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
+
+        {/* Screen Router */}
+        {screen === 'menu' && (
+          <MenuScreen
+            onPlay={() => handleNavigate('game')}
+            onTutorial={() => handleNavigate('tutorial')}
+            onSettings={() => setShowSettings(true)}
+          />
+        )}
+
+        {screen === 'game' && (
+          <GameScreen
+            onNavigate={handleNavigate}
+            sampleData={sampleData}
+            onDucksSavedChange={setDucksSaved}
+            onMessagesCountChange={setMessagesCount}
+            onActiveAgentChange={handleActiveAgentChange}
+          />
+        )}
+
+        {screen === 'tutorial' && (
+          <TutorialScreen
+            onNavigate={handleNavigate}
+            onActiveAgentChange={handleActiveAgentChange}
+          />
+        )}
+
+        {screen === 'gameover' && (
+          <GameOverScreen
+            ducksSaved={ducksSaved}
+            messagesCount={messagesCount}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {/* Agent Info Footer */}
+        <div className="fixed bottom-0 left-0 right-0 z-40">
+          <AgentInfoFooter activeAgentId={activeAgentId} />
+        </div>
+      </div>
+    </PageErrorBoundary>
   )
 }
